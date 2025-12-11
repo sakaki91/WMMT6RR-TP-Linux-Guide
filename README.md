@@ -8,7 +8,7 @@ Guide to running WANGAN MIDNIGHT MAXIMUM TUNE 6RR on specific hardware in Linux 
 
 *Obviously, every experience is unique when it comes to Teknoparrot and Linux, but this guide has been tested and prepared using the following* [configuration](#configuration-used).
 
-- [[Getting Started]](#)
+- [[Getting Started]](#getting-started)
 	- [[Preparing Prefix]](#preparing-prefix)
 	- [[Dependencies]](#dependencies)
 	- [[Installation]](#installation)
