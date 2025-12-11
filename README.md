@@ -16,7 +16,8 @@ Guide to running WANGAN MIDNIGHT MAXIMUM TUNE 6RR on specific hardware in Linux 
 		- [[Explanations]](#explanations)
 		- [[Tweaks]](#tweaks)
 		- [[Configuration Used]](#configuration-used)
-
+	- [[Screenshots]](src/)
+ 
 ## Getting Started
 
 First, we will need:  
