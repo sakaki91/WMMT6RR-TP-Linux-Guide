@@ -1,10 +1,20 @@
 # WMMT6RR-TP-Linux-Guide
-Guide to running WANGAN MIDNIGHT MAXIMUM TUNE 6RR on specific hardware in Linux via Teknoparrot, This project is 100% in favor of the existence of [Teknoparrot](https://teknoparrot.com/) and emulation itself!
+Guide to run WANGAN MIDNIGHT MAXIMUM TUNE (6/6R/6RR) on Linux via Teknoparrot, The maintainer of this repository does not support or agree with Teknoparrot's private policies, culture and access to software MUST BE FREE TO EVERYONE, and not just to those who have money.
 
 > [!IMPORTANT]  
->__THIS GUIDE DOES NOT PROVIDE UNAUTHORIZED DUMPS/ROMS IN ANY WAY; IT IS SIMPLY A WAY TO TEACH SIMPLE EMULATION THROUGH A DIFFERENT HOST SYSTEM.__  
+>__THIS GUIDE DOES NOT PROVIDE UNAUTHORIZED DUMPS/ROMS IN ANY WAY, IT IS SIMPLY A WAY TO TEACH SIMPLE EMULATION THROUGH A DIFFERENT HOST SYSTEM.__  
 >
-> __Status__: It's working fine, but it's __NOT__ saving progress, but I'm looking into fixing that!  
+> __Status__: It's "working fine", but it's __NOT__ saving progress, because TP (WMMT6RR) has a progress [save paywall](src/paywall.png).  
+
+Status:
+
+	WANGAN MIDNIGHT MAXIMUM TUNE Compatibility table:
+	
+	✅ - WMMT6: It works 100% without any problems, as it is still compatible with the legacy save routine system.
+	
+	⚠️ - WMMT6R: The game opens and works almost normally, but it does not save progress, for the same reason as WMMT6RR, just a paywall due to the parrot, if you have subscribed to the "service"... the game will work normally.
+	
+	⚠️ - WMMT6RR: This was the base version I used to write the guide, but you still have the same problem, it DOES NOT save progress because of the paywall but it works partially, or completely if you subscribe to the "service".
 
 *Obviously, every experience is unique when it comes to Teknoparrot and Linux, but this guide has been tested and prepared using the following* [configuration](#configuration-used).
 
@@ -44,7 +54,7 @@ In summary, the three folders we created are: the Games folder, where your memor
 
 and now:
 
-	$ export WINEPREFIX=~/Teknoparrot/Prefix
+	$ export WINEPREFIX=/home/$USER/Teknoparrot/Prefix
 
 This will store that path in the __*WINEPREFIX*__ variable, so we don't have to type the same line every time.
 
@@ -56,7 +66,7 @@ so that the basic structure of the prefix can be created.
 
 and for extracting WineGE:
 
-	$ tar -xvf ~/Downloads/wine-lutris-GE-Proton8-26-x86_64.tar.xz ~/Teknoparrot/WineGE/
+	$ tar -xvf /home/$USER/Downloads/wine-lutris-GE-Proton8-26-x86_64.tar.xz -C /home/$USER/Teknoparrot/WineGE/ --strip-components=1
 
 Remember... if you're using different paths, the commands need to be adapted to the path you're using!
 
@@ -64,8 +74,8 @@ Remember... if you're using different paths, the commands need to be adapted to 
 
 The Teknoparrot installer itself has dependency issues; the external dependencies we need to download and install are as follows:  
 
-`Microsoft .NET Runtime - 8.0.22`  
-`Microsoft Windows Desktop Runtime - 8.0.22`	
+[Microsoft .NET Runtime & .NET Desktop Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).  
+[Visual C++ Redistributable Runtimes All-in-One](https://www.techpowerup.com/download/visual-c-redistributable-runtime-package-all-in-one/).  
 
 Depending on when you're reading this guide, the versions may have been updated, but these are the ones I used!
 
@@ -88,6 +98,7 @@ And now we'll finally begin the mess:
 	$ winetricks d3dcompiler_47
 	$ winetricks dotnet48
 	$ winetricks vcrun2019
+	$ winetricks dxvk	
 
 > [!WARNING]
 > On GPUs with older drivers like mine (GTX970 + 535), the latest version of dxvk may cause problems with Vulkan 1.3, so we will use an older version with:
@@ -95,6 +106,13 @@ And now we'll finally begin the mess:
 	$ winetricks --force dxvk2010
 
 Remember, ideally you should always use the latest version, in this case `DXVK`. If your GPU doesn't have driver issues, you DON'T need to use that specific version.
+
+then we will enter a cmd shell and install the __Visual-C-Runtimes-All-in-One__:  
+	
+	$ cd /home/$USER/Downloads
+	$ unzip Visual-C-Runtimes-All-in-One* 
+	$ wine cmd
+	$ install_all.bat
 
 ## Installation
 
@@ -109,7 +127,7 @@ and then click on __Full Install__.
 In that case, it will look something like this:  
 
 	Games:
-	WMMT6RR
+	WMMT6		WMMT6R		WMMT6RR
 	
 	Prefix:
 	dosdevices  lutris.json  userdef.reg  winetricks.log
@@ -141,13 +159,13 @@ __Runner: Wine__
 
 in the (Lutris) Game Options:
 
-__Executable: /home/youruser/Teknoparrot/Program\TeknoParrotUi.exe__  
-__Wine Prefix: /home/youruser/Teknoparrot/Prefix__
+__Executable: /home/$USER/Teknoparrot/Program\TeknoParrotUi.exe__  
+__Wine Prefix: /home/$USER/Teknoparrot/Prefix__
 
 in (Lutris) Runner Options:
 
 __Wine Version: Customized (select the executable below)__  
-__Customized Wine Executable: /home/youruser/Teknoparrot/WineGE/lutris-GE-Proton8-26-x86_64/bin/wine__
+__Customized Wine Executable: /home/$USER/Teknoparrot/WineGE/lutris-GE-Proton8-26-x86_64/bin/wine__
 
 And to add your game to Teknoparrot, look for __"Add Game"__ in the three bars in the upper left corner and search for the game __Wangan Midnight Maximum Tune 6RR__ (or __6__ or __6R__ if you are using another version!). Then, in __Game Settings__, select the path to __wmn6r.exe__ in `~/Teknoparrot/Games/WMMT6RR`.
 
@@ -163,9 +181,9 @@ In this section, we will dedicate some adjustments and explanations.
 
 ### Explanations
 
-It has been tested several times, the game seems stable, but it most likely has some kind of write problem, as it doesn't save game progress. I'm still trying to intercept this with logs to try and figure out why. I did this in less than one night; it's still very experimental but entirely possible. Please be patient, I'm doing something complex for myself completely for free and I'm putting a lot of effort into it.
+I was investigating what the game saving problem could be, until I discovered (thanks to conversations on Reddit and TP himself) that there is a paywall in the emulator, making it possible to save progress ONLY via subscription.
 
-Also... if you have any problems, I STRONGLY recommend that you open issues so you can help me keep this project alive. I intend to expand this to other arcade games in the future. Well, that's all for now... have fun!
+Also... if you have any problems, I STRONGLY recommend that you open [issues](https://github.com/sakaki91/WMMT6RR-TP-Linux-Guide/issues) so you can help me keep this project alive. I intend to expand this to other arcade games in the future. Well, that's all for now... have fun!
 
 ### Tweaks
 
@@ -184,17 +202,17 @@ This will help remove window flickering along with WineGE.
 
 ### Configuration Used
 
-__OS:__ Linux Mint 22.2 x86_64   
-__Kernel:__ 6.14.0-37-generic  
+__OS:__ Linux Mint 22.2 & Fedora Workstation x86_64   
+__Kernel:__ 6.14.0-37-generic & Linux 6.18.8-200.fc43.x86_64   
 __CPU:__ Intel i7-9700 (8) @ 4.700GHz  
 __GPU:__ NVIDIA GeForce GTX 970  
 __Memory:__ 16GiB  
 
-GPU Driver Version: __NVIDIA GTX970 - nvidia-driver-535.274.02__
+GPU Driver Version: __NVIDIA GTX970 - nvidia-driver-535.274.02 & 580.119.02__
 
-Teknoparrot UI: __1.0.0.1820__
+Teknoparrot UI: __1.0.0.1903__
 
-Wine Version: __wine-9.0 (Ubuntu 9.0~repack-4build3)__ && __lutris-GE-Proton8-26-x86_64__  
+Wine Version: __wine-9.0 (Ubuntu 9.0~repack-4build3)__ && __wine-11.0 (Staging)__ && __lutris-GE-Proton8-26-x86_64__  
 Wine Mono: __9.0.0__  
-Winetricks Version: __20240105__  
-Lutris Version: __lutris-0.5.14__
+Winetricks Version: __20240105__  && __20260125__  
+Lutris Version: __lutris-0.5.14__ && __lutris-0.5.19__
